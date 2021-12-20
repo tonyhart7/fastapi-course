@@ -5,9 +5,9 @@ from sqlalchemy.sql.sqltypes import TIMESTAMP
 
 from database import Base
 
-
 class Post(Base):
     __tablename__ = "posts"
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True, nullable=False)
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
@@ -17,6 +17,7 @@ class Post(Base):
 
 class User(Base):
     __tablename__ = "users"
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True, nullable=False)
     email = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
@@ -26,6 +27,7 @@ class User(Base):
 
 class Vote(Base):
     __tablename__ = "votes"
+    __table_args__ = {'extend_existing': True}
     user_id = Column(Integer, ForeignKey(
         "users.id", ondelete="CASCADE"), primary_key=True)
     post_id = Column(Integer, ForeignKey(
