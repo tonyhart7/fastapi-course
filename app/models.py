@@ -5,6 +5,16 @@ from sqlalchemy.sql.sqltypes import TIMESTAMP
 
 from database import Base
 
+class User(Base):
+    __tablename__ = "users"
+    __table_args__ = {'extend_existing': True}
+    
+    id = Column(Integer, primary_key=True, nullable=False)
+    email = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True),
+                        nullable=False, server_default=text('now()'))
+
 class Post(Base):
     __tablename__ = "posts"
     __table_args__ = {'extend_existing': True}
@@ -20,21 +30,10 @@ class Post(Base):
 
     # owner = relationship("User")
 
-class User(Base):
-    __tablename__ = "users"
-    __table_args__ = {'extend_existing': True}
-    
-    id = Column(Integer, primary_key=True, nullable=False)
-    email = Column(String, nullable=False, unique=True)
-    password = Column(String, nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True),
-                        nullable=False, server_default=text('now()'))
-
-
 class Vote(Base):
     __tablename__ = "votes"
     __table_args__ = {'extend_existing': True}
-   
+    
     user_id = Column(Integer, ForeignKey(
         "users.id", ondelete="CASCADE"), primary_key=True)
     post_id = Column(Integer, ForeignKey(

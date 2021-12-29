@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.getcwd()))
 
-from typing import  List
+from typing import  List, Optional
 
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm.session import Session
@@ -16,8 +16,8 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=List[schemas.Post])
-def get_posts(db: Session = Depends(get_db)):
-    posts = db.query(models.Post).all()
+def get_posts(db: Session = Depends(get_db), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
+    posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
     return posts
 
 
